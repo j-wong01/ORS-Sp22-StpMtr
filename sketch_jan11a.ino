@@ -23,6 +23,8 @@ int buttState2 = 0;
 int RES_STATE = 0;
 int zeroState = 0;
 
+// display pins
+
 
 // offsets from location 0
 int offSet = 0;
