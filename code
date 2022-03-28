@@ -16,6 +16,8 @@ const int BUTTON2 = 5;
 const int RES_BUTT = 6;
 const int newZeroButt = 7;
 
+// display of steps
+
 
 // states of pushbuttons
 int buttState1 = 0;
