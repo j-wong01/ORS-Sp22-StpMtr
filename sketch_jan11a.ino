@@ -5,7 +5,7 @@ Author       : Joshua Wong
 Assistance   : Jon Walters, Bernardo Perez
 Purpose      : Based on four pushbuttons, the stepper motor will either take a step CCW or CW, will reset and move back to its initial location when it turned on, or set its current location to its new starting location
 Written      : 01/11/2022
-Last Updated : 02/20/2022
+Last Updated : 03/28/2022
 */
 
 // i/o pins
@@ -23,7 +23,10 @@ int buttState2 = 0;
 int RES_STATE = 0;
 int zeroState = 0;
 
-// display pins
+// enables
+const int left1 = 8;
+const int center1 = 9;
+const int right1 = 10;
 
 
 // offsets from location 0
@@ -37,6 +40,10 @@ void setup()
   // Declare pins as outputs
   pinMode(stepPin, OUTPUT);
   pinMode(dirPin, OUTPUT);
+ 
+  pinMode(left1, OUTPUT);
+  pinMode(center1, OUTPUT);
+  pinMode(right1, OUTPUT);
 }
 
   void loop()
@@ -52,6 +59,21 @@ void setup()
       buttState2 = digitalRead(BUTTON2);
       RES_STATE = digitalRead(RES_BUTT);
       zeroState = digitalRead(newZeroButt);
+     
+      // display current step count
+      digitalWrite(left1, LOW);
+      digitalWrite(center1, HIGH);
+      digitalWrite(right1, HIGH);
+      
+     
+      digitalWrite(left1, HIGH);
+      digitalWrite(center1, LOW);
+      digitalWrite(right1, HIGH);
+      
+     
+      digitalWrite(left1, HIGH);
+      digitalWrite(center1, HIGH);
+      digitalWrite(right1, LOW);
 
       
       // determine which direction to step or reset location
@@ -121,6 +143,18 @@ void setup()
           offSet = 0;
       }
       delay(1000);
+     
+      digitalWrite(left1, LOW);
+      digitalWrite(center1, HIGH);
+      digitalWrite(right1, HIGH);
+     
+      digitalWrite(left1, HIGH);
+      digitalWrite(center1, LOW);
+      digitalWrite(right1, HIGH);
+     
+      digitalWrite(left1, HIGH);
+      digitalWrite(center1, HIGH);
+      digitalWrite(right1, LOW);
     }
   delay(1000); // Wait a second
 
