@@ -5,7 +5,7 @@ Author       : Joshua Wong
 Assistance   : Jon Walters, Bernardo Perez
 Purpose      : Based on four pushbuttons, the stepper motor will either take a step CCW or CW, will reset and move back to its initial location when it turned on, or set its current location to its new starting location
 Written      : 01/11/2022
-Last Updated : 02/20/2022
+Last Updated : 03/28/2022
 */
 
 // i/o pins
