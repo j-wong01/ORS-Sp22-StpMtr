@@ -3,7 +3,9 @@
 Title        : Arduino Stepper Motor Controller For Robot Arm (ORS)
 Author       : Joshua Wong
 Assistance   : Jon Walters, Bernardo Perez
-Purpose      : Based on four pushbuttons, the stepper motor will either take a step CCW or CW, will reset and move back to its initial location when it turned on, or set its current location to its new starting location
+Purpose      : Based on four pushbuttons, the stepper motor will either take a step CCW or CW, will reset and move back to its initial location when it turned on, 
+               or set its current location to its new starting location. Three 7-segment displays are used to keep track of the number of steps taken from the initial
+               location.
 Written      : 01/11/2022
 Last Updated : 03/28/2022
 */
