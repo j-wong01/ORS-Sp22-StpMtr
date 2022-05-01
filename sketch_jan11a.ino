@@ -3,12 +3,12 @@
 Title        : Arduino Stepper Motor Controller For Robot Arm (ORS)
 Author       : Joshua Wong
 Assistance   : Jon Walters, Bernardo Perez
-Purpose      : Based on four pushbuttons, the stepper motor will either take a step CCW or CW, will reset and move back to its initial location when it turned on, 
-               or set its current location to its new starting location. Three 7-segment displays are used to keep track of the number of steps taken from the initial
-               location.
+Purpose      : Based on four pushbuttons, the stepper motor will either take a step CCW or CW, will reset and move back to its initial step location when it turned on, or set its current location to 50 steps from its start
+TODO         : Add kill switch in code and in hardware
 Written      : 01/11/2022
-Last Updated : 03/28/2022
+Last Updated : 04/30/2022
 */
+
 
 // i/o pins
 const int dirPin = 2;
@@ -16,14 +16,14 @@ const int stepPin = 3;
 const int BUTTON1 = 4;
 const int BUTTON2 = 5;
 const int RES_BUTT = 6;
-const int newZeroButt = 7;
+const int newFifButt = 7;
 
 
 // states of pushbuttons
 int buttState1 = 0;
 int buttState2 = 0;
 int RES_STATE = 0;
-int zeroState = 0;
+int fifState = 0;
 
 // enables
 const int left1 = 14;
@@ -73,17 +73,15 @@ void setup()
       buttState1 = digitalRead(BUTTON1);
       buttState2 = digitalRead(BUTTON2);
       RES_STATE = digitalRead(RES_BUTT);
-      zeroState = digitalRead(newZeroButt);
-
-
+      fifState = digitalRead(newFifButt);
 
       
       // determine which direction to step or reset location
-      if (buttState1 == LOW && buttState2 == LOW && RES_STATE == LOW && zeroState == LOW) {
+      if (buttState1 == LOW && buttState2 == LOW && RES_STATE == LOW && fifState == LOW) {
           x--;
-      } else if (buttState1 == HIGH && buttState2 == LOW && RES_STATE == LOW && zeroState == LOW){
+      } else if (buttState1 == HIGH && buttState2 == LOW && RES_STATE == LOW && fifState == LOW){
         
-        
+          // wait for button release
           while (buttState1) {
              buttState1 = digitalRead(BUTTON1);
           }
@@ -98,8 +96,9 @@ void setup()
           delayMicroseconds(2000);
           
           offSet++;
-      } else if (buttState1 == LOW && buttState2 == HIGH && RES_STATE == LOW && zeroState == LOW){
+      } else if (buttState1 == LOW && buttState2 == HIGH && RES_STATE == LOW && fifState == LOW){
         
+          // wait for button release
           while (buttState2) {
             buttState2 = digitalRead(BUTTON2);
           }
@@ -116,9 +115,9 @@ void setup()
           offSet--;
           
       // reset to initial location (degrees) of motor  
-      } else if (buttState1 == LOW && buttState2 == LOW && RES_STATE == HIGH && zeroState == LOW) {
+      } else if (buttState1 == LOW && buttState2 == LOW && RES_STATE == HIGH && fifState == LOW) {
         
-        
+          // wait for button release
           while (RES_STATE) {
             RES_STATE = digitalRead(RES_BUTT);
           }
@@ -126,7 +125,6 @@ void setup()
           x = -1; // incremented to 0
           
           // move CCW or CW depending on which direction was taken more
-          
           if (offSet >= 0) {
             
             digitalWrite(dirPin, LOW);
@@ -136,6 +134,8 @@ void setup()
               delayMicroseconds(1000);
               digitalWrite(stepPin, LOW);
               delayMicroseconds(1000);
+              
+              delay(1000);
             }
             
           } else {
@@ -147,29 +147,37 @@ void setup()
               delayMicroseconds(1000);
               digitalWrite(stepPin, LOW);
               delayMicroseconds(1000);
+              
+              delay(1000);
             }
             
           }
           
           offSet = 0;
           
+          /* NOT TESTED MAY NEED TO BE FIXED */
       // set current step to location 0  
-      } else if (buttState1 == LOW && buttState2 == LOW && RES_STATE == LOW && zeroState == HIGH) {
+      } else if (buttState1 == LOW && buttState2 == LOW && RES_STATE == LOW && fifState == HIGH) {
         
-          while (zeroState) {
-            zeroState = digitalRead(newZeroButt);
+          // wait for button release
+          while (fifState) {
+            fifState = digitalRead(newFifButt);
           }
           
-          x = -1; // incremented to 0
-          offSet = 0;
+          x = 49; // incremented to 0
+          offSet = 50;
       }
       
+      // reset back to 0 after 360 degree rotation
       if (offSet > 199) {
         offSet = 0;
       }
       
+      
+      // display logic
       int a1, a2, a3, b1, b2, b3, c1, c2, c3, d1, d2, d3;
       
+      // extract each digit to display individually
       int offCpy = offSet;
       
       int hund = offCpy / 100;
@@ -353,12 +361,14 @@ void setup()
           break;
       }
       
-            
+      
+      // write booleans to the decoder to display      
       digitalWrite(d, d1);
       digitalWrite(c, c1);
       digitalWrite(b, b1);
       digitalWrite(a, a1);
       
+      // enable each 7 seg independently and then disable to show all values at the same time
       digitalWrite(left1, LOW);
       digitalWrite(center1, HIGH);
       digitalWrite(right1, HIGH);
