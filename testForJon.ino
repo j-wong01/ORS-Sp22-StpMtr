@@ -1,3 +1,11 @@
+// QUICK AND DIRTY TEST OF HARDWARE DISPLAYS
+
+/*
+  Not optimized whatsoever, a lot of it was copy and paste. 
+  However, including it in the github so testing the displays quality is less of a pain
+  Jon requested the code so the file is named for him :P
+*/
+
 const int d = 8;
 const int c = 9;
 const int b = 10;
@@ -35,6 +43,7 @@ void setup()
     int d1, c1, b1, a1;
     int ones;
     
+    // displaying all default 16 characters and cycling through
     for (ones = 0; ones < 16; ones++) {
       
       
@@ -460,5 +469,4 @@ void setup()
     delay(1000);
     
   }
-
 
